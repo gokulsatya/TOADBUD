@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>TOAD SAGE</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.css" rel="stylesheet">
+</head>
+<body class="w-96 bg-gray-900 text-white p-4">
+    <div class="flex items-center space-x-2 mb-6">
+        <span class="text-2xl">🐸</span>
+        <h1 class="text-xl font-bold text-green-400">TOAD SAGE</h1>
+    </div>
+
+    <div class="space-y-4">
+        <!-- Input Section -->
+        <div class="bg-gray-800 rounded-lg p-4">
+            <label class="block text-sm font-medium mb-2">Check Security</label>
+            <input type="text" id="securityInput" 
+                   class="w-full bg-gray-700 border border-gray-600 rounded p-2 text-white"
+                   placeholder="Enter URL, IP, or file hash">
+            <div class="flex space-x-2 mt-3">
+                <button id="checkButton" class="bg-green-600 hover:bg-green-700 px-4 py-2 rounded text-sm">
+                    Analyze
+                </button>
+                <button id="clearButton" class="bg-gray-700 hover:bg-gray-600 px-4 py-2 rounded text-sm">
+                    Clear
+                </button>
+            </div>
+        </div>
+
+        <!-- Results Section -->
+        <div id="resultsSection" class="bg-gray-800 rounded-lg p-4 hidden">
+            <h2 class="text-lg font-medium mb-3">Analysis Results</h2>
+            <div id="resultsContent" class="space-y-3">
+                <!-- Results will be inserted here -->
+            </div>
+        </div>
+
+        <!-- Educational Tips -->
+        <div class="bg-gray-800 rounded-lg p-4">
+            <h2 class="text-sm font-medium text-green-400 mb-2">Security Tips</h2>
+            <div id="securityTip" class="text-sm text-gray-300">
+                Today's Tip: Always verify URLs before clicking. Watch for subtle misspellings or unusual domains.
+            </div>
+        </div>
+    </div>
+
+    <script src="popup.js"></script>
+</body>
+</html>
