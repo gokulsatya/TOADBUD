@@ -19,18 +19,40 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         });
     
-        // Handle saving the API key
+// In popup.js, modify the save API key handler
         saveApiKeyButton.addEventListener('click', () => {
             const apiKey = apiKeyInput.value.trim();
             if (apiKey) {
-                chrome.storage.local.set({ vtApiKey: apiKey }, function() {
+                saveApiKeyButton.textContent = 'Saving...';
+                saveApiKeyButton.disabled = true;
+        
+                chrome.runtime.sendMessage({
+                    type: 'SAVE_API_KEY',
+                    apiKey: apiKey
+                }, (response) => {
+                    saveApiKeyButton.disabled = false;
+                    saveApiKeyButton.textContent = 'Save API Key';
+            
+                    if (response.success) {
                     apiKeyInput.value = '';
                     apiKeyInput.placeholder = '*** API Key Saved ***';
+                    showMessage('API key saved successfully', 'success');
+                    } else {
+                        showMessage(response.error || 'Failed to save API key', 'error');
+                    }
                 });
             }
         });
+
+        function showMessage(message, type) {
+            const messageDiv = document.createElement('div');
+            messageDiv.textContent = message;
+            messageDiv.className = `text-sm ${type === 'success' ? 'text-green-400' : 'text-red-400'} mt-2`;
+            apiKeyInput.parentNode.appendChild(messageDiv);
+            setTimeout(() => messageDiv.remove(), 3000);
+        }
     
-    
+    });
     // Handle the analyze button click event
     checkButton.addEventListener('click', async () => {
         const value = input.value.trim();
@@ -169,4 +191,4 @@ document.addEventListener('DOMContentLoaded', function() {
 
         return educational[type][isMalicious ? 'malicious' : 'safe'];
     }
-})});
+});
