@@ -1,31 +1,29 @@
 // Background script for TOAD SAGE
 // This script runs in the background and handles API calls to avoid CORS issues
 
-// Store API key securely
-chrome.storage.local.get(['vtApiKey'], function(result) {
-    if (!result.vtApiKey) {
-        // Set a default API key if none exists
-        // In production, you should implement proper API key management
-        chrome.storage.local.set({ vtApiKey: '5ff6b494f2208cf276025593de613dfd0cafec5eb741d686e5e7292d6f34e14c' });
-    }
-});
-
 // Listen for messages from the popup
 chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
+    // Handle different types of messages
     if (request.type === 'ANALYZE') {
         analyzeTarget(request.data)
             .then(response => sendResponse(response))
             .catch(error => sendResponse({ error: error.message }));
         return true; // Required for async response
+    } else if (request.type === 'SAVE_API_KEY') {
+        // Handle saving new API key
+        chrome.storage.local.set({ vtApiKey: request.apiKey }, () => {
+            sendResponse({ success: true });
+        });
+        return true;
     }
 });
 
-// Main analysis function
+// Main analysis function with improved error handling
 async function analyzeTarget(data) {
     try {
         const apiKey = await getApiKey();
         
-        // Make API call to VirusTotal
+        // Make API call to VirusTotal with proper error handling
         const response = await fetch(
             `https://www.virustotal.com/api/v3/${data.type}s/${encodeURIComponent(data.value)}`,
             {
@@ -36,8 +34,14 @@ async function analyzeTarget(data) {
             }
         );
 
+        // Handle different types of API response errors
         if (!response.ok) {
-            throw new Error('Analysis failed. Please check your API key or try again later.');
+            if (response.status === 401) {
+                throw new Error('Invalid API key. Please check your VirusTotal API key.');
+            } else if (response.status === 429) {
+                throw new Error('Rate limit exceeded. Please try again in a few minutes.');
+            }
+            throw new Error(`Analysis failed (${response.status}). Please try again later.`);
         }
 
         const result = await response.json();
@@ -46,6 +50,13 @@ async function analyzeTarget(data) {
             data: result
         };
     } catch (error) {
+        // Enhanced error handling with more specific messages
+        if (error.message.includes('API key not found')) {
+            return {
+                success: false,
+                error: 'Please enter your VirusTotal API key in the extension settings.'
+            };
+        }
         return {
             success: false,
             error: error.message
@@ -53,11 +64,11 @@ async function analyzeTarget(data) {
     }
 }
 
-// Helper function to get API key from storage
+// Helper function to get API key from storage with better error messaging
 async function getApiKey() {
     return new Promise((resolve, reject) => {
         chrome.storage.local.get(['vtApiKey'], function(result) {
-            if (result.vtApiKey) {
+            if (result.vtApiKey && result.vtApiKey.trim() !== '') {
                 resolve(result.vtApiKey);
             } else {
                 reject(new Error('API key not found'));

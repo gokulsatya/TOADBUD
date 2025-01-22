@@ -6,6 +6,30 @@ document.addEventListener('DOMContentLoaded', function() {
     const clearButton = document.getElementById('clearButton');
     const resultsSection = document.getElementById('resultsSection');
     const resultsContent = document.getElementById('resultsContent');
+
+    document.addEventListener('DOMContentLoaded', function() {
+        // Existing element references...
+        const apiKeyInput = document.getElementById('apiKeyInput');
+        const saveApiKeyButton = document.getElementById('saveApiKey');
+    
+        // Check if API key exists and show a placeholder if it does
+        chrome.storage.local.get(['vtApiKey'], function(result) {
+            if (result.vtApiKey) {
+                apiKeyInput.placeholder = '*** API Key Saved ***';
+            }
+        });
+    
+        // Handle saving the API key
+        saveApiKeyButton.addEventListener('click', () => {
+            const apiKey = apiKeyInput.value.trim();
+            if (apiKey) {
+                chrome.storage.local.set({ vtApiKey: apiKey }, function() {
+                    apiKeyInput.value = '';
+                    apiKeyInput.placeholder = '*** API Key Saved ***';
+                });
+            }
+        });
+    
     
     // Handle the analyze button click event
     checkButton.addEventListener('click', async () => {
@@ -145,4 +169,4 @@ document.addEventListener('DOMContentLoaded', function() {
 
         return educational[type][isMalicious ? 'malicious' : 'safe'];
     }
-});
+})});
