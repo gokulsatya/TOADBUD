@@ -11,7 +11,14 @@ document.addEventListener('DOMContentLoaded', function() {
         // Existing element references...
         const apiKeyInput = document.getElementById('apiKeyInput');
         const saveApiKeyButton = document.getElementById('saveApiKey');
-    
+        // Add this to your existing DOMContentLoaded event listener in popup.js
+        const groqApiKeyInput = document.getElementById('groqApiKeyInput');
+        const saveGroqApiKeyButton = document.getElementById('saveGroqApiKey');
+        chrome.storage.local.get(['groqApiKey'], function(result) {
+            if (result.groqApiKey) {
+                groqApiKeyInput.placeholder = '*** API Key Saved ***';
+            }
+        });
         // Check if API key exists and show a placeholder if it does
         chrome.storage.local.get(['vtApiKey'], function(result) {
             if (result.vtApiKey) {

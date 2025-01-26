@@ -1,0 +1,106 @@
+/* contentStyle.css */
+#toad-sage-icon {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    width: 50px;
+    height: 50px;
+    background: #1a1a1a;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    font-size: 24px;
+    z-index: 9999;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+}
+
+#toad-sage-chat {
+    position: fixed;
+    bottom: 80px;
+    right: 20px;
+    width: 350px;
+    height: 500px;
+    background: #1a1a1a;
+    border-radius: 10px;
+    display: none;
+    flex-direction: column;
+    z-index: 9999;
+    box-shadow: 0 2px 15px rgba(0,0,0,0.3);
+}
+
+#toad-sage-chat.visible {
+    display: flex;
+}
+
+.chat-header {
+    padding: 15px;
+    background: #2a2a2a;
+    border-radius: 10px 10px 0 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    color: #fff;
+}
+
+.chat-messages {
+    flex-grow: 1;
+    padding: 15px;
+    overflow-y: auto;
+    color: #fff;
+}
+
+.chat-message {
+    margin-bottom: 10px;
+    padding: 10px;
+    border-radius: 5px;
+    max-width: 80%;
+}
+
+.chat-message.user {
+    background: #2a2a2a;
+    margin-left: auto;
+}
+
+.chat-message.assistant {
+    background: #0d472e;
+}
+
+.chat-input {
+    padding: 15px;
+    border-top: 1px solid #2a2a2a;
+}
+
+.chat-input textarea {
+    width: 100%;
+    padding: 10px;
+    border-radius: 5px;
+    background: #2a2a2a;
+    color: #fff;
+    border: none;
+    resize: none;
+    margin-bottom: 10px;
+}
+
+.send-btn {
+    width: 100%;
+    padding: 8px;
+    background: #0d472e;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.send-btn:hover {
+    background: #0f5436;
+}
+
+.close-btn {
+    background: none;
+    border: none;
+    color: #fff;
+    font-size: 20px;
+    cursor: pointer;
+}

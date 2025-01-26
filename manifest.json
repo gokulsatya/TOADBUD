@@ -1,24 +1,31 @@
 {
-    "manifest_version": 3,
-    "name": "TOAD SAGE",
-    "version": "1.0.0",
-    "description": "Your Security Analysis Companion",
-    "permissions": [
+  "manifest_version": 3,
+  "name": "TOAD SAGE",
+  "version": "1.0.0",
+  "description": "Your Security Analysis Companion",
+  "permissions": [
       "storage",
-      "activeTab"
-    ],
-    "host_permissions": [
-      "https://www.virustotal.com/api/v3/*"
-    ],
-    "action": {
+      "activeTab",
+      "scripting"  
+  ],
+  "host_permissions": [
+      "https://www.virustotal.com/api/v3/*",
+      "https://api.groq.com/v1/*"  
+  ],
+  "action": {
       "default_popup": "popup.html",
       "default_icon": {
-        "16": "icons/icon16.png",
-        "48": "icons/icon48.png",
-        "128": "icons/icon128.png"
+          "16": "icons/icon16.png",
+          "48": "icons/icon48.png",
+          "128": "icons/icon128.png"
       }
-    },
-    "background": {
+  },
+  "content_scripts": [{
+      "matches": ["<all_urls>"],
+      "js": ["contentScript.js"],
+      "css": ["contentStyle.css"]
+  }],
+  "background": {
       "service_worker": "background.js"
-    }
   }
+}
